@@ -8,21 +8,21 @@ SWITCHES = [
         "username": "admin",
         "password": "",
         "device_type": "extreme",  # ExtremeXOS
-    }
+    },
 {
         "name": "MGMT_Network",
         "host": "10.10.1.31",
         "username": "admin",
         "password": "",
         "device_type": "extreme",  # ExtremeXOS
-    }
+    },
 {
         "name": "ACCT_Network",
         "host": "10.10.1.32",
         "username": "admin",
         "password": "",
         "device_type": "extreme",  # ExtremeXOS
-    }
+    },
 {
         "name": "User_Network",
         "host": "10.10.1.22",
