@@ -1,0 +1,78 @@
+from netmiko import ConnectHandler
+from datetime import datetime
+
+SWITCHES = [
+    {
+        "name": "IT_Network",
+        "host": "10.10.1.30",
+        "username": "admin",
+        "password": "",
+        "device_type": "extreme",  # ExtremeXOS
+    }
+{
+        "name": "MGMT_Network",
+        "host": "10.10.1.31",
+        "username": "admin",
+        "password": "",
+        "device_type": "extreme",  # ExtremeXOS
+    }
+{
+        "name": "ACCT_Network",
+        "host": "10.10.1.32",
+        "username": "admin",
+        "password": "",
+        "device_type": "extreme",  # ExtremeXOS
+    }
+{
+        "name": "User_Network",
+        "host": "10.10.1.22",
+        "username": "admin",
+        "password": "",
+        "device_type": "extreme",  # ExtremeXOS
+    }
+]
+
+def get_exos_config(sw):
+    conn = ConnectHandler(
+        device_type=sw["device_type"],
+        host=sw["host"],
+        username=sw["username"],
+        password=sw["password"],
+    )
+
+    # EXOS config command
+    cfg = conn.send_command("show configuration")
+    conn.disconnect()
+    return cfg
+
+def main():
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print("=== Part D: Generate Switch INI Inventory ===")
+    print(f"Timestamp: {ts}\n")
+
+    out_file = "switch_inventory.ini"
+    with open(out_file, "w", encoding="utf-8") as f:
+        f.write("[access_closet_1_switches]\n")
+
+        for sw in SWITCHES:
+            print(f"Connecting to {sw['name']} ({sw['host']}) ...")
+            cfg = get_exos_config(sw)
+
+            # Host line (simple INI inventory style)
+            f.write(f"{sw['name']} ansible_host={sw['host']}\n")
+
+            # Store required fields + configuration data (as a block)
+            f.write(f"\n[{sw['name']}:vars]\n")
+            f.write(f"switch_name={sw['name']}\n")
+            f.write(f"switch_ip={sw['host']}\n")
+            f.write("switch_config=\n")
+            for line in cfg.splitlines():
+                f.write(f"  {line}\n")  # indented multiline value
+            f.write("\n")
+
+            print(f"  OK: Pulled config ({len(cfg.splitlines())} lines)")
+
+    print(f"\nSUCCESS: Wrote {out_file}")
+
+if __name__ == "__main__":
+    main()
