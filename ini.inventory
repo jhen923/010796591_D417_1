@@ -41,17 +41,15 @@ SWITCHES = [
 
 def get_exos_config(sw):
     conn = ConnectHandler(
-    device_type=sw["device_type"],
+    device_type="extreme",
     host=sw["host"],
-    username=sw["username"],
-    password=sw["password"],
-    port=22,
-    timeout=60,
-    conn_timeout=60,
-    global_delay_factor=2,
-    fast_cli=False
+    username="admin",
+    password="",
+    use_keys=False,
+    allow_agent=False,
+    fast_cli=False,
+    conn_timeout=30,
 )
-
 
 
     # EXOS config command
