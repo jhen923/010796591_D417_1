@@ -2,6 +2,13 @@ from netmiko import ConnectHandler
 from datetime import datetime
 
 SWITCHES = [
+ {
+        "name": "Local_Switch",
+        "host": "10.10.1.24",
+        "username": "admin",
+        "password": "",
+        "device_type": "extreme",  # ExtremeXOS
+    },
     {
         "name": "IT_Network",
         "host": "10.10.1.30",
@@ -34,11 +41,18 @@ SWITCHES = [
 
 def get_exos_config(sw):
     conn = ConnectHandler(
-        device_type=sw["device_type"],
-        host=sw["host"],
-        username=sw["username"],
-        password=sw["password"],
-    )
+    device_type=sw["device_type"],
+    host=sw["host"],
+    username=sw["username"],
+    password=sw["password"],
+    port=22,
+    timeout=60,
+    conn_timeout=60,
+    global_delay_factor=2,
+    fast_cli=False
+)
+
+
 
     # EXOS config command
     cfg = conn.send_command("show configuration")
