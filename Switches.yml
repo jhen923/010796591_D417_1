@@ -1,0 +1,6 @@
+switches:
+  - name: IT_Network
+    host: 10.10.1.30
+    username: admin
+    password: 
+    device_type: extreme
